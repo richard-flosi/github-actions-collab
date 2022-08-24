@@ -2,6 +2,9 @@ name: Continuous Integration Workflow
 on:
   workflow_dispatch: # Manually trigger a workflow https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch
   pull_request: # Pull Requests
+  schedule:
+    # At every 15th minute. https://crontab.guru/every-15-minutes
+    - cron: "*/15 * * * *"
 jobs:
   build:
     name: Run Tests
@@ -12,8 +15,7 @@ jobs:
       - name: Run Tests
         run: |
           echo "OK"
-          echo "DEBUG"
-          exit 1
+          exit 0
       - name: Tests ✅
         if: ${{ success() }}
         run: |
