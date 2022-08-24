@@ -1,6 +1,11 @@
 name: Continuous Integration Workflow
 on:
   workflow_dispatch: # Manually trigger a workflow https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch
+    inputs:
+      item_id:
+        description: Item Id
+        required: true
+        type: string
   pull_request: # Pull Requests
   schedule:
     # At every 15th minute. https://crontab.guru/every-15-minutes
@@ -15,4 +20,4 @@ jobs:
       - name: Run Tests
         run: |
           echo "OK"
-          exit 1
+          exit 0
