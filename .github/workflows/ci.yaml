@@ -1,7 +1,15 @@
 name: Continuous Integration Workflow
 on:
   workflow_dispatch: # Manually trigger a workflow https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch
+    inputs:
+      item_id:
+        description: Item Id
+        required: true
+        type: string
   pull_request: # Pull Requests
+  schedule:
+    # At every 15th minute. https://crontab.guru/every-15-minutes
+    - cron: "*/15 * * * *"
 jobs:
   build:
     name: Run Tests
@@ -12,30 +20,4 @@ jobs:
       - name: Run Tests
         run: |
           echo "OK"
-          exit 1
-      - name: Tests ✅
-        if: ${{ success() }}
-        run: |
-          curl --request POST \
-          --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'content-type: application/json' \
-          --data '{
-            "context": "tests",
-            "state": "success",
-            "description": "Tests passed",
-            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          }'
-      - name: Tests 🚨
-        if: ${{ failure() }}
-        run: |
-          curl --request POST \
-          --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'content-type: application/json' \
-          --data '{
-            "context": "tests",
-            "state": "failure",
-            "description": "Tests failed",
-            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          }'
+          exit 0
