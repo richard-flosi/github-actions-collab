@@ -12,6 +12,7 @@ jobs:
       - name: Run Tests
         run: |
           echo "OK"
+          echo "DEBUG"
           exit 1
       - name: Tests ✅
         if: ${{ success() }}
